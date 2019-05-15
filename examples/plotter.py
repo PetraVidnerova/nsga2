@@ -1,6 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 
+
 class Plotter():
     def __init__(self, problem):
         self.directory = 'plots'
@@ -31,29 +32,34 @@ class Plotter():
             os.makedirs(self.directory)
 
     def __plot_front(self, front, generation_number):
-        filename = "{}/generation{}.png".format(self.directory, str(generation_number))
+        filename = "{}/generation{}.png".format(self.directory,
+                                                str(generation_number))
         figure = plt.figure()
         axes = figure.add_subplot(111)
 
         computed_f1 = map(lambda individual: individual.objectives[0], front)
         computed_f2 = map(lambda individual: individual.objectives[1], front)
-        axes.plot(computed_f1, computed_f2, 'g.', label='Computed Pareto Front')
+        axes.plot(computed_f1, computed_f2, 'g.',
+                  label='Computed Pareto Front')
 
-        perfect_pareto_front_f1, perfect_pareto_front_f2 = self.problem.perfect_pareto_front()
-        axes.plot(perfect_pareto_front_f1, perfect_pareto_front_f2, 'r.', label='Perfect Pareto Front')
+        perfect_pareto_front_f1, perfect_pareto_front_f2 = \
+            self.problem.perfect_pareto_front()
+        axes.plot(perfect_pareto_front_f1, perfect_pareto_front_f2,
+                  'r.', label='Perfect Pareto Front')
 
         if self._f1_lim is None:
-            self._f1_lim = (min(0, min(perfect_pareto_front_f1)), max(computed_f1))
+            self._f1_lim = (
+                min(0, min(perfect_pareto_front_f1)), max(computed_f1))
         if self._f2_lim is None:
-            self._f2_lim = (min(0, min(perfect_pareto_front_f2)), max(computed_f2))
+            self._f2_lim = (
+                min(0, min(perfect_pareto_front_f2)), max(computed_f2))
 
         axes.set_xlabel('$f1$')
         axes.set_ylabel('$f2$')
         axes.set_xlim(self._f1_lim[0], self._f1_lim[1])
         axes.set_ylim(self._f2_lim[0], self._f2_lim[1])
-        axes.set_title('Computed Pareto front @ Generation {:}'.format(generation_number))
+        axes.set_title(
+            'Computed Pareto front @ Generation {:}'.format(generation_number))
         plt.legend(loc='upper left')
         plt.savefig(filename)
         plt.close(figure)
-
-
